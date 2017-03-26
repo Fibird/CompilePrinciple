@@ -72,6 +72,7 @@ TOKEN : /* KEYS */
 | < WHILE : "while" >
 | < RETURN : "return" >
 | < IF : "if" >
+| < NULL : "null" >
 }
 
 TOKEN : /* OPERATORS */
@@ -501,7 +502,12 @@ void Expression() :
 {/*@bgen(jjtree) Expression */
   try {
 /*@egen*/
-  AdditiveExpression()/*@bgen(jjtree)*/
+  "("
+  Expression()
+  ")"
+  ExpressionC()
+  | Identifier() ExpressionC()
+  | Integer()ExpressionC()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -524,97 +530,20 @@ void Expression() :
 /*@egen*/
 }
 
-void AdditiveExpression() :
-{/*@bgen(jjtree) AdditiveExpression */
-  SimpleNode jjtn000 = new SimpleNode(JJTADDITIVEEXPRESSION);
+void ExpressionC() :
+{/*@bgen(jjtree) ExpressionC */
+  SimpleNode jjtn000 = new SimpleNode(JJTEXPRESSIONC);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
 /*@egen*/}
-{/*@bgen(jjtree) AdditiveExpression */
+{/*@bgen(jjtree) ExpressionC */
   try {
 /*@egen*/
-  MultiplicativeExpression()
-  (
-    (
-      "+"
-    | "-"
-    )
-    MultiplicativeExpression()
-  )*/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/
-}
-
-void MultiplicativeExpression() :
-{/*@bgen(jjtree) MultiplicativeExpression */
-  SimpleNode jjtn000 = new SimpleNode(JJTMULTIPLICATIVEEXPRESSION);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) MultiplicativeExpression */
-  try {
-/*@egen*/
-  UnaryExpression()
-  (
-    (
-      "*"
-    | "/"
-    | "%"
-    )
-    UnaryExpression()
-  )*/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/
-}
-
-void UnaryExpression() :
-{/*@bgen(jjtree) UnaryExpression */
-  SimpleNode jjtn000 = new SimpleNode(JJTUNARYEXPRESSION);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) UnaryExpression */
-  try {
-/*@egen*/
-  "(" Expression() ")"
-| Identifier()
-| Integer()/*@bgen(jjtree)*/
+  (    (    Operators()
+  Expression()
+)
+  ExpressionC()
+)?/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -683,6 +612,28 @@ void Relations() :
   try {
 /*@egen*/
   <GT> | <LT> | <EQUAL> | <LOWEQU> | <GREATEQU> | <NEQUAL>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Operators() :
+{/*@bgen(jjtree) Operators */
+  SimpleNode jjtn000 = new SimpleNode(JJTOPERATORS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ }
+{/*@bgen(jjtree) Operators */
+  try {
+/*@egen*/
+  < PLUS >
+| < MINUS >
+| < MULTIPLY >
+| < DIVIDE >
+| < ASSIGN >/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

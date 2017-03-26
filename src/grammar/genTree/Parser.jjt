@@ -68,6 +68,7 @@ TOKEN : /* KEYS */
 | < WHILE : "while" >
 | < RETURN : "return" >
 | < IF : "if" >
+| < NULL : "null" >
 }
 
 TOKEN : /* OPERATORS */
@@ -226,42 +227,22 @@ void Condition() :
 void Expression() :
 {}
 {
-  AdditiveExpression()
+  "("
+  Expression()
+  ")"
+  ExpressionC()
+  | Identifier() ExpressionC()
+  | Integer()ExpressionC()
 }
 
-void AdditiveExpression() :
+void ExpressionC() :
 {}
 {
-  MultiplicativeExpression()
-  (
-    (
-      "+"
-    | "-"
-    )
-    MultiplicativeExpression()
-  )*
-}
-
-void MultiplicativeExpression() :
-{}
-{
-  UnaryExpression()
-  (
-    (
-      "*"
-    | "/"
-    | "%"
-    )
-    UnaryExpression()
-  )*
-}
-
-void UnaryExpression() :
-{}
-{
-  "(" Expression() ")"
-| Identifier()
-| Integer()
+  (    (    Operators()
+  Expression()
+)
+  ExpressionC()
+)?
 }
 
 void Identifier() :
@@ -280,6 +261,16 @@ void Relations() :
 {}
 {
   <GT> | <LT> | <EQUAL> | <LOWEQU> | <GREATEQU> | <NEQUAL>
+}
+
+void Operators() :
+{ }
+{
+  < PLUS >
+| < MINUS >
+| < MULTIPLY >
+| < DIVIDE >
+| < ASSIGN >
 }
 
 void ReturnSent() :
