@@ -391,9 +391,14 @@ void DeclareSent() :
    | <CHAR>
   ]
    Identifier()
+   (	< ASSIGN > Integer()
+   )?
    (
      <COMMA>
      Identifier()
+   (
+	< ASSIGN > Integer()
+   )?
    )*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {

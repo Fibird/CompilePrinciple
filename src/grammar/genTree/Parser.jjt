@@ -194,9 +194,14 @@ void DeclareSent() :
    | <CHAR>
   ]
    Identifier()
+   (	< ASSIGN > Integer()
+   )?
    (
      <COMMA>
      Identifier()
+   (
+	< ASSIGN > Integer()
+   )?
    )*
 }
 
