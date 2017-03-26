@@ -86,8 +86,10 @@ void SequenceSent() :
 {}
 {
   //DeclareSent() // just for test
-   [AssigmentSent()
-  | DeclareSent()]
+   [
+      AssigmentSent()
+    | DeclareSent()
+   ]
   < SEMICOLON>}
 void ConditionSent() :
 {}
@@ -108,12 +110,12 @@ void LoopSent() :
 void DeclareSent() :
 {}
 {
-  	[
-  	<INT>
-   |<DOUBLE>
+  [
+  	 <INT>
+   | <DOUBLE>
    | <FLOAT>
    | <CHAR>
-   ]
+  ]
    Identifier()
    (     <COMMA>
      Identifier()

@@ -205,8 +205,10 @@ void SequenceSent() :
    try {
 /*@egen*/
   //DeclareSent() // just for test
-   [AssigmentSent()
-  | DeclareSent()]
+   [
+      AssigmentSent()
+    | DeclareSent()
+   ]
   < SEMICOLON>/*@bgen(jjtree)*/
    } catch (Throwable jjte000) {
      if (jjtc000) {
@@ -303,37 +305,37 @@ void DeclareSent() :
   jjtree.openNodeScope(jjtn000);
 /*@egen*/}
 {/*@bgen(jjtree) DeclareSent */
-        try {
+  try {
 /*@egen*/
-  	[
-  	<INT>
-   |<DOUBLE>
+  [
+  	 <INT>
+   | <DOUBLE>
    | <FLOAT>
    | <CHAR>
-   ]
+  ]
    Identifier()
    (     <COMMA>
      Identifier()
    )*/*@bgen(jjtree)*/
-        } catch (Throwable jjte000) {
-          if (jjtc000) {
-            jjtree.clearNodeScope(jjtn000);
-            jjtc000 = false;
-          } else {
-            jjtree.popNode();
-          }
-          if (jjte000 instanceof RuntimeException) {
-            throw (RuntimeException)jjte000;
-          }
-          if (jjte000 instanceof ParseException) {
-            throw (ParseException)jjte000;
-          }
-          throw (Error)jjte000;
-        } finally {
-          if (jjtc000) {
-            jjtree.closeNodeScope(jjtn000, true);
-          }
-        }
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
 /*@egen*/
 }
 
