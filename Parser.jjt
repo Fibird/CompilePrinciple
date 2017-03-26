@@ -1,9 +1,70 @@
 /**
  * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(Parser)package grammar;
+ */
+options
+{
+  static = true;
+}
 
-public class Parser{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new Parser(System.in);    try    {      SimpleNode n = Parser.Start();      n.dump("");      System.out.println("Thank you.");    }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(Parser)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >}
-TOKEN : /* KEYS */
+PARSER_BEGIN(Parser)
+package grammar;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+
+public class Parser
+{
+  public static void main(String args []) throws ParseException, FileNotFoundException
+  {
+    FileReader Fr = new FileReader("E:\\eclipse_workspace\\JavaCC\\src\\words.c"); 
+    new Parser(Fr);
+    try
+    {
+      SimpleNode n = Parser.Start();
+      n.dump("");
+      System.out.println("Thank you.");
+    }
+    catch (Exception e)
+    {
+      System.out.println("Oops.");
+      System.out.println(e.getMessage());
+    }
+  }
+}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| < "//" (~[ "\n", "\r" ])*
+    (
+      "\n"
+    | "\r"
+    | "\r\n"
+    ) >
+| < "/*" (~[ "*" ])* "*"
+    (
+      ~[ "/" ] (~[ "*" ])* "*"
+    )*
+    "/" >
+}
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL :
+    < DECIMAL_LITERAL > ([ "l", "L" ])?
+  | < HEX_LITERAL > ([ "l", "L" ])?
+  | < OCTAL_LITERAL > ([ "l", "L" ])? 
+    >
+| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >
+| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >
+| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+}
+
+TOKEN : /* KEYS */
 {
   < INT : "int" >
 | < DOUBLE : "double" >
@@ -14,9 +75,7 @@ public class Parser{  public static void main(String args [])  {    System.o
 | < WHILE : "while" >
 | < RETURN : "return" >
 | < IF : "if" >
-| < MAIN : "main" >
 }
-TOKEN : /* IDENTIFIERS */{  < IDENTIFIER :    < LETTER >    (      < LETTER >    | < DIGIT >    )* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}
 
 TOKEN : /* OPERATORS */
 {
@@ -28,14 +87,15 @@ TOKEN : /* OPERATORS */
 }
 
 TOKEN : /* RELATIONS */
-{
-  < RELATIONS : <GT> | <LT> | <EQUAL> | <LOWEQU> | <GREATEQU> | <NEQUAL>> | < #GT : ">" >
-| < #LT : "<" >
-| < #EQUAL : "==" >
-| < #NEQUAL : "!=" >
-| < #LOWEQU : "<=" >
-| < #GREATEQU : ">=" >
-}
+{ 
+< GT : ">" >
+| < LT : "<" >
+| < EQUAL : "==" >
+| < NEQUAL : "!=" >
+| < LOWEQU : "<=" >
+| < GREATEQU : ">=" >
+}
+
 TOKEN : /* SEPARATER */
 {
   < QUATION : "\"" >
@@ -46,41 +106,74 @@ TOKEN : /* SEPARATER */
 | < RBRACE : ")" >
 | < COMMA : "," >
 | < EXCLA_SYM : "!" >
-}SimpleNode Start() :{}{  Program()  {    return jjtThis;  }}
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+
+SimpleNode Start() :
+{}
+{
+  Program()
+  {
+    return jjtThis;
+  }
+}
 
 void Program() :
 {}
-{	<INT>
-	< MAIN >
+{
+	<INT>
+	< IDENTIFIER >
 	< LBRACE >
 	< RBRACE>
 	< LCURLY_BRACE>
-	(SentenceBlock())*
-	< RCURLY_BRACE>
+	(
+	  SentenceBlock()
+	)*
+	(
+	  ReturnSent()
+	)?
+	<RCURLY_BRACE>
 }
 
 void SentenceBlock() :
 {}
-{	Sentence()
+{
+	Sentence()
 	| < LCURLY_BRACE>
 	( SentenceBlock() )*
 	< RCURLY_BRACE>
-}
+}
+
 void Sentence() :
 {}
 {
   SequenceSent()
   | ConditionSent()
-  | LoopSent()}
+  | LoopSent()
+}
 
 void SequenceSent() :
 {}
 {
   //DeclareSent() // just for test
-  [ DeclareSent()
-  | AssigmentSent() ]
-  < SEMICOLON>}
-void ConditionSent() :
+   [AssigmentSent()
+  | DeclareSent()]
+  < SEMICOLON>
+}
+
+void ConditionSent() :
 {}
 {
   <IF>
@@ -105,12 +198,11 @@ void DeclareSent() :
    | <FLOAT>
    | <CHAR>
    ]
-   /*(
-     LOOKAHEAD(Identifier())
-     <COMMA>
-   )**/
    Identifier()
-   < SEMICOLON>
+   (
+     <COMMA>
+     Identifier()
+   )*
 }
 
 void AssigmentSent() :
@@ -119,7 +211,6 @@ void AssigmentSent() :
   Identifier()
   <ASSIGN>
   Expression()
-  <SEMICOLON>
 }
 
 void Condition() :
@@ -127,9 +218,10 @@ void Condition() :
 {
   "("
   Expression()
-  <RELATIONS>
+  Relations()
   Expression()
-  ")"}
+  ")"
+}
 
 void Expression_c() :
 { }
@@ -138,7 +230,72 @@ void Expression_c() :
     "+"
   | "-"
   Expression()
-  Expression()  )
+  Expression()
+  )
 }
   
-void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}void Identifier() :{}{  < IDENTIFIER >}void Integer() :{}{  < INTEGER_LITERAL >}
+
+void Expression() :
+{}
+{
+  AdditiveExpression()
+}
+
+void AdditiveExpression() :
+{}
+{
+  MultiplicativeExpression()
+  (
+    (
+      "+"
+    | "-"
+    )
+    MultiplicativeExpression()
+  )*
+}
+
+void MultiplicativeExpression() :
+{}
+{
+  UnaryExpression()
+  (
+    (
+      "*"
+    | "/"
+    | "%"
+    )
+    UnaryExpression()
+  )*
+}
+
+void UnaryExpression() :
+{}
+{
+  "(" Expression() ")"
+| Identifier()
+| Integer()
+}
+
+void Identifier() :
+{}
+{
+  < IDENTIFIER >
+}
+
+void Integer() :
+{}
+{
+  < INTEGER_LITERAL >
+}
+
+void Relations() :
+{}
+{
+  <GT> | <LT> | <EQUAL> | <LOWEQU> | <GREATEQU> | <NEQUAL>
+}
+
+void ReturnSent() :
+{}
+{
+	< RETURN > <INTEGER_LITERAL> < SEMICOLON>
+}
