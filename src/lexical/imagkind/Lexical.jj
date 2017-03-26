@@ -1,0 +1,77 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(Lexical)package lexical.imagkind;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+
+public class Lexical
+{
+  public static void main(String args []) throws ParseException, FileNotFoundException
+  {
+    FileReader Fr = new FileReader("E:\\eclipse_workspace\\JavaCC\\src\\words.c");
+    SimpleCharStream Scs = new SimpleCharStream(Fr);
+    LexicalTokenManager Ltm = new LexicalTokenManager(Scs);
+	Token Tk = new Token();
+	
+    while ((Tk = LexicalTokenManager.getNextToken()).kind != EOF)
+    {
+		System.out.println(Tk.kind + "\t" + Tk.image);
+    }
+  }
+}
+
+PARSER_END(Lexical)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+| < "//" (~["\n"])* "\n" >
+}
+
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < GT : ">" >
+| < LT : "<" >
+| < ASSIGN : "=" >
+}
+
+TOKEN : /* KEYS */
+{
+  < INT : "int" >
+| < DOUBLE : "double" >
+| < FOR : "for" >
+| < WHILE : "while" >
+| < RETURN : "return" >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < VARIABLE : ((< LETTER >)+(< DIGIT > | < LETTER >)*) >
+| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+TOKEN : /* SEPARATER */
+{
+  < QUATION : "\"" >
+| < SEMICOLON : ";" >
+| < LCURLY_BRACE : "{" >
+| < RCURLY_BRACE : "}" >
+| < LBRACE : "(" >
+| < RBRACE : ")" >
+| < COMMA : "," >
+| < EXCLA_SYM : "!" >
+}
+
+TOKEN : /* LITERALS */
+{
+  < STRING : (< QUATION >)(~["\n"])*(< QUATION >)  >
+| < CONSTANT : (< DIGIT >)+ >
+}
