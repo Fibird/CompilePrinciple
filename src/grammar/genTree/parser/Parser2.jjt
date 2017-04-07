@@ -1,0 +1,330 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(Parser2)package grammar.genTree.parser;
+import teacher.util.*;
+
+public class Parser2{  static QTTable qtTable = new QTTable();}PARSER_END(Parser2)SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| < "//" (~[ "\n", "\r" ])*
+    (
+      "\n"
+    | "\r"
+    | "\r\n"
+    ) >
+| < "/*" (~[ "*" ])* "*"
+    (
+      ~[ "/" ] (~[ "*" ])* "*"
+    )*
+    "/" >
+}
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL :
+    < DECIMAL_LITERAL > ([ "l", "L" ])?
+  | < HEX_LITERAL > ([ "l", "L" ])?
+  | < OCTAL_LITERAL > ([ "l", "L" ])? 
+    >
+| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >
+| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >
+| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+}
+
+TOKEN : /* KEYS */
+{
+  < INT : "int" >
+| < DOUBLE : "double" >
+| < FLOAT : "float" >
+| < CHAR : "char" >
+| < VOID : "void" >
+| < FOR : "for" >
+| < WHILE : "while" >
+| < RETURN : "return" >
+| < IF : "if" >
+}
+
+TOKEN : /* OPERATORS */
+{
+ < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < ASSIGN : "=" >
+}
+
+TOKEN : /* RELATIONS */
+{ 
+< GT : ">" >
+| < LT : "<" >
+| < EQUAL : "==" >
+| < NEQUAL : "!=" >
+| < LOWEQU : "<=" >
+| < GREATEQU : ">=" >
+}
+
+TOKEN : /* SEPARATER */
+{
+  < QUATION : "\"" >
+| < SEMICOLON : ";" >
+| < LCURLY_BRACE : "{" >
+| < RCURLY_BRACE : "}" >
+| < LBRACE : "(" >
+| < RBRACE : ")" >
+| < COMMA : "," >
+| < EXCLA_SYM : "!" >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+
+SimpleNode Start() :
+{}
+{
+  Program()
+  {
+    return jjtThis;
+  }
+}
+
+void Program() :
+{}
+{
+	<INT>
+	< IDENTIFIER >
+	< LBRACE >
+	< RBRACE>
+	< LCURLY_BRACE>
+	(
+	  SentenceBlock()
+	)*
+	(
+	  ReturnSent()
+	)?
+	<RCURLY_BRACE>
+}
+
+void SentenceBlock() :
+{}
+{
+	Sentence()
+	| < LCURLY_BRACE>
+	( SentenceBlock() )*
+	< RCURLY_BRACE>
+}
+
+void Sentence() :
+{}
+{
+  SequenceSent()
+  | ConditionSent()
+  | LoopSent()
+}
+
+void SequenceSent() :
+{}
+{
+  //DeclareSent() // just for test
+   [
+      AssigmentSent()
+    | DeclareSent()
+   ]
+  < SEMICOLON>
+}
+
+void ConditionSent() :
+{}
+{
+  <IF>
+   Condition()
+   SentenceBlock()
+}
+
+void LoopSent() :
+{}
+{
+  <WHILE>
+  Condition()
+   SentenceBlock()
+}
+
+void DeclareSent() :
+{}
+{
+  [
+  	 <INT>
+   | <DOUBLE>
+   | <FLOAT>
+   | <CHAR>
+  ]
+   Identifier()
+   (
+	< ASSIGN > Integer()
+   )?
+   (
+     <COMMA>
+     Identifier()
+   (
+	< ASSIGN > Integer()
+   )?
+   )*
+}
+
+void AssigmentSent() :
+{}
+{
+  Identifier()
+  <ASSIGN>
+  Expression()
+}
+
+void Condition() :
+{}
+{
+  "("
+  Expression()
+  Relations()
+  Expression()
+  ")"
+}
+  
+String Expression() :
+{
+  String str;
+}
+{
+  str = AdditiveExpression()
+  {
+    return str;
+  }
+}
+
+String AdditiveExpression() :
+{
+  String first;
+  String middle;
+  String newTemp;
+  Token op;
+}
+{
+  first = MultiplicativeExpression()
+  {
+	newTemp = first;
+  }
+  (
+    (
+     op = "+"
+    | op = "-"
+    )
+    middle = MultiplicativeExpression()
+    {
+		newTemp = VariableNameGenerator.genVariableName();
+		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
+		qtTable.addQTInfo(qt);
+    }
+  )*
+  {
+    return newTemp;
+  }
+}
+
+String MultiplicativeExpression() :
+{
+  String first;
+  String middle;
+  String newTemp;
+  Token op;
+}
+{
+  first = UnaryExpression()
+  {
+	newTemp = first;
+  }
+  (
+    (
+    op =  "*"
+    |op =  "/"
+    |op =  "%"
+    )
+    middle = UnaryExpression()
+    {
+		newTemp = VariableNameGenerator.genVariableName();
+		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
+		qtTable.addQTInfo(qt);
+    }
+  )*
+  {
+	return newTemp;
+  }
+}
+
+String UnaryExpression() :
+{
+  String str;
+}
+{
+   "(" str = Expression() ")"
+ {
+  return str;
+ }
+| str = Identifier()
+{
+  return str;
+}
+| str = Integer()
+{
+  return str;
+}
+}
+
+String Identifier() :
+{
+	Token t;
+  }
+{
+  t = < IDENTIFIER >
+  {
+    return t.image;
+  }
+}
+
+String Integer() :
+{
+	Token t;
+}
+{
+  t = < INTEGER_LITERAL >
+  {
+	return t.image;
+  }
+}
+
+String Relations() :
+{
+	Token t = null;
+}
+{
+  [t = <GT> | t = <LT> | t = <EQUAL> | t = <LOWEQU> | t = <GREATEQU> | t = <NEQUAL>]
+  {
+    return t.image;
+  }
+}
+
+void ReturnSent() :
+{}
+{
+	< RETURN > <INTEGER_LITERAL> < SEMICOLON>
+}
