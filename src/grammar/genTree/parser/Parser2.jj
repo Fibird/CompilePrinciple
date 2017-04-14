@@ -253,11 +253,11 @@ void SequenceSent() :
   SimpleNode jjtn000 = new SimpleNode(JJTSEQUENCESENT);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/
+}
 {/*@bgen(jjtree) SequenceSent */
    try {
 /*@egen*/
-  //DeclareSent() // just for test
    [
       AssigmentSent()
     | DeclareSent()
@@ -287,18 +287,42 @@ void SequenceSent() :
 
 void ConditionSent() :
 {/*@bgen(jjtree) ConditionSent */
-  SimpleNode jjtn000 = new SimpleNode(JJTCONDITIONSENT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+        SimpleNode jjtn000 = new SimpleNode(JJTCONDITIONSENT);
+        boolean jjtc000 = true;
+        jjtree.openNodeScope(jjtn000);
+/*@egen*/
+	int quad;		// record the index of quad
+	ConditionValue cv;		// return chains of TRUE and FALSE
+}
 {/*@bgen(jjtree) ConditionSent */
   try {
 /*@egen*/
   <IF>
-   Condition()
+  {
+	//quad = qtTable.get
+  }
+   cv = Condition()
+   {
+	 quad = QTInfo.innerIdSeqen + 1;
+	 cv.backpatchTrueChain(quad);
+   }
    SentenceBlock()
-  (	< ELSE >
+   {
+	 quad = QTInfo.innerIdSeqen + 1;
+	 cv.backpatchFalseChain(quad);
+   }
+  (
+    LOOKAHEAD(1)	< ELSE >
+	{
+	  	QTInfo qt = new QTInfo("J", "_", "_", "");
+		qtTable.addQTInfo(qt);
+		quad = QTInfo.innerIdSeqen + 1;
+		cv.backpatchFalseChain(quad);
+	}
 	SentenceBlock()
+	{
+		//quad = QTInfo.innerIdSeqen + 1;	
+	}
   )*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -447,7 +471,7 @@ ConditionValue Condition() :
   String op;
   String rightValue;
   String leftValue;
-  ConditionValue cv = null;
+  ConditionValue cv = new ConditionValue();
 }
 {/*@bgen(jjtree) Condition */
   try {
@@ -463,7 +487,7 @@ ConditionValue Condition() :
   }
 /*@egen*/
   {
-    QTInfo qt = new QTInfo(op, rightValue, leftValue, "");
+    QTInfo qt = new QTInfo("J" + op, rightValue, leftValue, "");
 	QTInfo qt2 = new QTInfo("J", "_", "_", "");
 	qtTable.addQTInfo(qt);
 	qtTable.addQTInfo(qt2);

@@ -136,9 +136,9 @@ void Sentence() :
 }
 
 void SequenceSent() :
-{}
 {
-  //DeclareSent() // just for test
+}
+{
    [
       AssigmentSent()
     | DeclareSent()
@@ -147,13 +147,37 @@ void SequenceSent() :
 }
 
 void ConditionSent() :
-{}
+{
+	int quad;		// record the index of quad
+	ConditionValue cv;		// return chains of TRUE and FALSE
+}
 {
   <IF>
-   Condition()
+  {
+	//quad = qtTable.get
+  }
+   cv = Condition()
+   {
+	 quad = QTInfo.innerIdSeqen + 1;
+	 cv.backpatchTrueChain(quad);
+   }
    SentenceBlock()
-  (	< ELSE >
+   {
+	 quad = QTInfo.innerIdSeqen + 1;
+	 cv.backpatchFalseChain(quad);
+   }
+  (
+    LOOKAHEAD(1)	< ELSE >
+	{
+	  	QTInfo qt = new QTInfo("J", "_", "_", "");
+		qtTable.addQTInfo(qt);
+		quad = QTInfo.innerIdSeqen + 1;
+		cv.backpatchFalseChain(quad);
+	}
 	SentenceBlock()
+	{
+		//quad = QTInfo.innerIdSeqen + 1;	
+	}
   )*
 }
 
@@ -200,7 +224,7 @@ ConditionValue Condition() :
   String op;
   String rightValue;
   String leftValue;
-  ConditionValue cv = null;
+  ConditionValue cv = new ConditionValue();
 }
 {
   "("
@@ -209,7 +233,7 @@ ConditionValue Condition() :
   leftValue = Expression()
   ")"
   {
-    QTInfo qt = new QTInfo(op, rightValue, leftValue, "");
+    QTInfo qt = new QTInfo("J" + op, rightValue, leftValue, "");
 	QTInfo qt2 = new QTInfo("J", "_", "_", "");
 	qtTable.addQTInfo(qt);
 	qtTable.addQTInfo(qt2);
