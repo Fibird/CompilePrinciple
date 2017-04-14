@@ -7,5 +7,13 @@ int main()
 	{
 		a3 = a4 * 4 + 5;
 	}
+	else if (a4 > a5)
+	{
+		a3 = 5;
+	}
+	else
+	{
+		a5 = 5 + 6;
+	}
 	return 0;
 }

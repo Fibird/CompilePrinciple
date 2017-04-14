@@ -45,6 +45,7 @@ TOKEN : /* KEYS */
 | < WHILE : "while" >
 | < RETURN : "return" >
 | < IF : "if" >
+| < ELSE : "else" >
 }
 
 TOKEN : /* OPERATORS */
@@ -151,6 +152,9 @@ void ConditionSent() :
   <IF>
    Condition()
    SentenceBlock()
+  (	< ELSE >
+	SentenceBlock()
+  )*
 }
 
 void LoopSent() :
@@ -191,14 +195,29 @@ void AssigmentSent() :
   Expression()
 }
 
-void Condition() :
-{}
+ConditionValue Condition() :
+{
+  String op;
+  String rightValue;
+  String leftValue;
+  ConditionValue cv = null;
+}
 {
   "("
-  Expression()
-  Relations()
-  Expression()
+  rightValue = Expression()
+  op = Relations()
+  leftValue = Expression()
   ")"
+  {
+    QTInfo qt = new QTInfo(op, rightValue, leftValue, "");
+	QTInfo qt2 = new QTInfo("J", "_", "_", "");
+	qtTable.addQTInfo(qt);
+	qtTable.addQTInfo(qt2);
+
+	cv.mergeTrue(qt);
+	cv.mergeFalse(qt2);
+	return cv;
+  }
 }
   
 String Expression() :

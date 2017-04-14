@@ -8,7 +8,7 @@ public class Parser
 {
   public static void main(String args []) throws ParseException, FileNotFoundException
   {
-    FileReader Fr = new FileReader("E:\\eclipse_workspace\\JavaCC\\src\\words.c"); 
+    FileReader Fr = new FileReader("test/words.c"); 
     new Parser(Fr);
     try
     {

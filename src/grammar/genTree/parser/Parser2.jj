@@ -49,6 +49,7 @@ TOKEN : /* KEYS */
 | < WHILE : "while" >
 | < RETURN : "return" >
 | < IF : "if" >
+| < ELSE : "else" >
 }
 
 TOKEN : /* OPERATORS */
@@ -295,7 +296,10 @@ void ConditionSent() :
 /*@egen*/
   <IF>
    Condition()
-   SentenceBlock()/*@bgen(jjtree)*/
+   SentenceBlock()
+  (	< ELSE >
+	SentenceBlock()
+  )*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -434,20 +438,40 @@ void AssigmentSent() :
 /*@egen*/
 }
 
-void Condition() :
+ConditionValue Condition() :
 {/*@bgen(jjtree) Condition */
   SimpleNode jjtn000 = new SimpleNode(JJTCONDITION);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/
+  String op;
+  String rightValue;
+  String leftValue;
+  ConditionValue cv = null;
+}
 {/*@bgen(jjtree) Condition */
   try {
 /*@egen*/
   "("
-  Expression()
-  Relations()
-  Expression()
+  rightValue = Expression()
+  op = Relations()
+  leftValue = Expression()
   ")"/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    QTInfo qt = new QTInfo(op, rightValue, leftValue, "");
+	QTInfo qt2 = new QTInfo("J", "_", "_", "");
+	qtTable.addQTInfo(qt);
+	qtTable.addQTInfo(qt2);
+
+	cv.mergeTrue(qt);
+	cv.mergeFalse(qt2);
+	return cv;
+  }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
