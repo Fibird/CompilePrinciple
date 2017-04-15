@@ -1,13 +1,14 @@
 int main()
 {
 	// This is a comment
-	int a3, a4 = 5;
-	a3 = a4 + 34;
-	if (a4 > a5)
+	int a, b, c;
+	a = b + 34;
+	c = a / 8 * 3;
+	if (a > b)
 	{
-		a5 = 5 + 6;
-		b = c + 4 * d;
+		a = 5 + 6;
+		b = c + 4 * a;
 	}
-	d = c + 8;
+	a = c + 8;
 	return 0;
 }

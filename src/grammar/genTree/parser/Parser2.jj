@@ -342,7 +342,7 @@ void ConditionSent() :
 	SentenceBlock()
 	{
 		quad = QTInfo.innerIdSeqen + 1;
-		qtTable.get(tempIndex - 1).setResult(quad);
+		qtTable.get(tempIndex).setResult(quad);
 	}
   )*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {

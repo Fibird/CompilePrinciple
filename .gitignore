@@ -1,5 +1,6 @@
-*.class
-*.java
+# Generated sources by JavaCC
+src/grammar/**/*.java
+src/lexical/**/*.java
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
