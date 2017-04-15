@@ -168,7 +168,7 @@ void ConditionSent() :
 	 cv.backpatchFalseChain(quad);
    }
   (
-    LOOKAHEAD(1)	< ELSE >
+    LOOKAHEAD(1)	// lookahead a more, and used for nested if-else	< ELSE >
 	{
 	  	QTInfo qt = new QTInfo("J", "_", "_", "");
 		qtTable.addQTInfo(qt);
