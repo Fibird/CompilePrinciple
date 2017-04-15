@@ -471,7 +471,7 @@ void DeclareSent() :
 /*@egen*/
 }
 
-void AssigmentSent() :
+String AssigmentSent() :
 {/*@bgen(jjtree) AssigmentSent */
   SimpleNode jjtn000 = new SimpleNode(JJTASSIGMENTSENT);
   boolean jjtc000 = true;
@@ -494,6 +494,7 @@ void AssigmentSent() :
   {
 	QTInfo qt = new QTInfo("=", arg1, "", result);
 	qtTable.addQTInfo(qt);
+	return result;
   }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {

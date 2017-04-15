@@ -249,7 +249,7 @@ void DeclareSent() :
    )*
 }
 
-void AssigmentSent() :
+String AssigmentSent() :
 {
   String result;
   String arg1;
@@ -261,6 +261,7 @@ void AssigmentSent() :
   {
 	QTInfo qt = new QTInfo("=", arg1, "", result);
 	qtTable.addQTInfo(qt);
+	return result;
   }
 }
 
