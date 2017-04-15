@@ -215,11 +215,18 @@ void DeclareSent() :
 }
 
 void AssigmentSent() :
-{}
 {
-  Identifier()
+  String result;
+  String arg1;
+}
+{
+  result = Identifier()
   <ASSIGN>
-  Expression()
+  arg1 = Expression()
+  {
+	QTInfo qt = new QTInfo("=", arg1, "", result);
+	qtTable.addQTInfo(qt);
+  }
 }
 
 ConditionValue Condition() :

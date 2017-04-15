@@ -436,13 +436,25 @@ void AssigmentSent() :
   SimpleNode jjtn000 = new SimpleNode(JJTASSIGMENTSENT);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/
+  String result;
+  String arg1;
+}
 {/*@bgen(jjtree) AssigmentSent */
   try {
 /*@egen*/
-  Identifier()
+  result = Identifier()
   <ASSIGN>
-  Expression()/*@bgen(jjtree)*/
+  arg1 = Expression()/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+	QTInfo qt = new QTInfo("=", arg1, "", result);
+	qtTable.addQTInfo(qt);
+  }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
