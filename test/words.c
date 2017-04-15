@@ -10,6 +10,8 @@ int main()
 	else
 	{
 		a5 = 5 + 6;
+		b = c + 4 * d;
 	}
+	d = c + 8;
 	return 0;
 }
