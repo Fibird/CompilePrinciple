@@ -30,7 +30,7 @@ public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants/*@egen*/
 /*@egen*/
   public static void main(String args []) throws ParseException, FileNotFoundException
   {
-    FileReader Fr = new FileReader("test/words.c"); 
+    FileReader Fr = new FileReader("test/while.c"); 
     new Parser(Fr);
     try
     {

@@ -168,7 +168,7 @@ void ConditionSent() :
 {
 	int quad;		// record the index of quad
 	ConditionValue cv;		// return chains of TRUE and FALSE
-	int tempIndex;		// record index of a quad and backpatch it later
+	int tempIndex;		// record index of a quad and back patch it later
 }
 {
   <IF>
@@ -203,11 +203,28 @@ void ConditionSent() :
 }
 
 void LoopSent() :
-{}
+{
+	int quad;				// record the index of quad
+	ConditionValue cv;		// return chains of TRUE and FALSE
+	int tempIndex;			// record index of a quad and back patch it later
+}
 {
   <WHILE>
-  Condition()
-   SentenceBlock()
+  {
+	tempIndex = QTInfo.innerIdSeqen + 1;  
+  }
+  cv = Condition()
+  {
+	 quad = QTInfo.innerIdSeqen + 1;
+	 cv.backpatchTrueChain(quad);
+  }
+  SentenceBlock()
+  {
+	QTInfo qt = new QTInfo("J", "_", "_", tempIndex);
+	qtTable.addQTInfo(qt);
+	quad = QTInfo.innerIdSeqen + 1;
+	cv.backpatchFalseChain(quad);
+  }
 }
 
 void DeclareSent() :
