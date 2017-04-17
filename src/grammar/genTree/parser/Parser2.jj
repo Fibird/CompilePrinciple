@@ -492,7 +492,7 @@ String AssigmentSent() :
   }
 /*@egen*/
   {
-	QTInfo qt = new QTInfo("=", arg1, "", result);
+	QTInfo qt = new QTInfo("=", arg1, "_", result);
 	qtTable.addQTInfo(qt);
 	return result;
   }/*@bgen(jjtree)*/
@@ -644,6 +644,7 @@ String AdditiveExpression() :
 		newTemp = VariableNameGenerator.genVariableName();
 		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
 		qtTable.addQTInfo(qt);
+		first = newTemp;
     }
   )*/*@bgen(jjtree)*/
   {
@@ -705,6 +706,7 @@ String MultiplicativeExpression() :
 		newTemp = VariableNameGenerator.genVariableName();
 		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
 		qtTable.addQTInfo(qt);
+		first = newTemp;
     }
   )*/*@bgen(jjtree)*/
   {

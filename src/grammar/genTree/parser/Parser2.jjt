@@ -259,7 +259,7 @@ String AssigmentSent() :
   <ASSIGN>
   arg1 = Expression()
   {
-	QTInfo qt = new QTInfo("=", arg1, "", result);
+	QTInfo qt = new QTInfo("=", arg1, "_", result);
 	qtTable.addQTInfo(qt);
 	return result;
   }
@@ -323,6 +323,7 @@ String AdditiveExpression() :
 		newTemp = VariableNameGenerator.genVariableName();
 		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
 		qtTable.addQTInfo(qt);
+		first = newTemp;
     }
   )*
   {
@@ -353,6 +354,7 @@ String MultiplicativeExpression() :
 		newTemp = VariableNameGenerator.genVariableName();
 		QTInfo qt = new QTInfo(op.image, first, middle, newTemp);
 		qtTable.addQTInfo(qt);
+		first = newTemp;
     }
   )*
   {
