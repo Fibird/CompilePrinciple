@@ -1,6 +1,7 @@
 # Generated sources by JavaCC
 src/grammar/**/*.java
 src/lexical/**/*.java
+!src/grammar/genTree/parser/MainTest.java
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
