@@ -344,7 +344,7 @@ void ConditionSent() :
 		quad = QTInfo.innerIdSeqen + 1;
 		qtTable.get(tempIndex).setResult(quad);
 	}
-  )*/*@bgen(jjtree)*/
+  )?/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

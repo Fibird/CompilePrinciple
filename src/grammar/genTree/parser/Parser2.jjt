@@ -199,7 +199,7 @@ void ConditionSent() :
 		quad = QTInfo.innerIdSeqen + 1;
 		qtTable.get(tempIndex).setResult(quad);
 	}
-  )*
+  )?
 }
 
 void LoopSent() :
