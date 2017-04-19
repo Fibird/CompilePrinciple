@@ -24,15 +24,10 @@ import java.io.FileReader;
 
 import java.io.FileNotFoundException;
 public class MainTest {
-
-	public MainTest() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public static void main(String args []) throws FileNotFoundException {
 		// The files used to be tested are:
 		// assign.c, if_block.c, if_else.c, nested_if_else.c, while_block.c
-		FileReader Fr = new FileReader("test/temp.c"); 
+		FileReader Fr = new FileReader("test/if_elif.c"); 
 	    new Parser2(Fr);
 	    try
 	    {
@@ -46,6 +41,5 @@ public class MainTest {
 	      System.out.println("Oops.");
 	      System.out.println(e.getMessage());
 	    }
-	  }
-	  
+	  }	  
 }

@@ -1,14 +1,34 @@
+/**
+ * Author: Chaoyang Liu
+ * E-main: chaoyanglius@outlook.com
+ *
+ * Software License Agreement (GPL License)
+ * This util is definition of quadruples.
+ * Copyright (c) 2017, Chaoyang Liu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ************************************************************************/
 package teacher.util;
 
-//定义四元式的信息
 public class QTInfo {
 
-	public static int innerIdSeqen = 0; // 四元式全局个数
-	private int innerId; // 当前四元式ID
-	private String operator;
-	private String arg1;
-	private String arg2;
-	private String result;
+	public static int innerIdSeqen = 0; // numbers of all quadruples globally
+	private int innerId; 		// index of current quadruple
+	private String operator;	// first field of quadruple
+	private String arg1;		// second field of quadruple
+	private String arg2;		// third field of quadruple 
+	private String result;		// forth field of quadruple
 
 	public QTInfo(String operator, String arg1, String arg2, String result) {
 		super();
@@ -48,7 +68,7 @@ public class QTInfo {
 	}
 
 	public String toString() {
-		// TODO Auto-generated method stub
+		// format output of quadruples
 		return this.innerId + ":\t(\t" + this.operator + ",\t" + this.arg1
 				+ ",\t" + this.arg2 + ",\t" + this.result + "\t)\n";
 	}
